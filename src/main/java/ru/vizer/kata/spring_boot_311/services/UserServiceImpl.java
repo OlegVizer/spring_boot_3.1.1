@@ -3,42 +3,41 @@ package ru.vizer.kata.spring_boot_311.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.vizer.kata.spring_boot_311.dao.UserDao;
 import ru.vizer.kata.spring_boot_311.model.User;
+import ru.vizer.kata.spring_boot_311.repositories.UserRepository;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
-    private final UserDao userDao;
+public class UserServiceImpl  {
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @Override
-    public User getUserById(long id) {
-        return userDao.getUserById(id);
+    public User getUserById(int id) {
+        Optional<User> foundUser = userRepository.findById(id);
+        return foundUser.orElse(null);
     }
 
-    @Override
+
     public List<User> getAllUser() {
-        return userDao.getAllUser();
+        return userRepository.findAll();
     }
     @Transactional
-    @Override
     public void addUser(User user) {
-        userDao.addUser(user);
+        userRepository.save(user);
     }
 
     @Transactional
-    @Override
     public void updateUser(User user) {
-        userDao.updateUser(user);
+        userRepository.save(user);
     }
     @Transactional
-    @Override
-    public void removeUser(long id) {
-        userDao.removeUser(id);
+    public void removeUser(int id) {
+        userRepository.deleteById(id);
     }
 }

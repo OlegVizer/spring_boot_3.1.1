@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.vizer.kata.spring_boot_311.model.User;
-import ru.vizer.kata.spring_boot_311.services.UserService;
+import ru.vizer.kata.spring_boot_311.services.UserServiceImpl;
 
 @Controller
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -34,19 +34,19 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/edit")
-    public String updateUserForm(Model model, @PathVariable("id") long id){
+    public String updateUserForm(Model model, @PathVariable("id") int id){
         model.addAttribute("user", userService.getUserById(id));
         return "edit";
     }
 
     @PostMapping("/users/{id}/edit")
-    public String updateUser(@PathVariable("id") long id, @ModelAttribute("user") User user) {
+    public String updateUser(@PathVariable("id") int id, @ModelAttribute("user") User user) {
         userService.updateUser(user);
         return "redirect:/users";
     }
 
     @GetMapping("/users/{id}/delete")
-    public String deleteUser(@PathVariable("id") long id) {
+    public String deleteUser(@PathVariable("id") int id) {
         userService.removeUser(id);
         return "redirect:/users";
     }
